@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 
 public class GameController implements KeyListener {
 	
-	
    private ShipEntity ship;
    
    private GameView gv;
@@ -31,7 +30,6 @@ public class GameController implements KeyListener {
    public GameController(GameView gv) {
        this.gv = gv;
        
-       
        gv.setKeyListener(this);
        
        keyDown.put("space", false);
@@ -43,7 +41,7 @@ public class GameController implements KeyListener {
 
    private void loadImages() {
        
-       ship = new ShipEntity(shipImg, 300, 300, 30);
+       ship = new ShipEntity(shipImg, 300, 300, 100);
        
        spriteList[0] = ship;
        spriteList[1] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,20);
@@ -106,18 +104,22 @@ public class GameController implements KeyListener {
    }
 
    public void run() {
-       long lastUpdateTime = System.nanoTime();
-       long deltaTime;
-
-       while(gameRunning) {
-           /** Tiden som gått sedan senaste uppdateringen */
-           deltaTime = System.nanoTime() - lastUpdateTime;
-           lastUpdateTime = System.nanoTime();
-
-           update(deltaTime); // gör inget i nuläget
-           render();
-           try {Thread.currentThread().sleep(5);}catch (Exception e) {} // Paus 10 ms
-       }
+	   
+	   int fps = 50;
+	   int updateTime = (int)(1.0/fps*1000000000.0);
+	   	
+	   long lastUpdateTime = System.nanoTime();
+	   
+	   while(gameRunning){
+		   
+		   long deltaTime = System.nanoTime() - lastUpdateTime;
+		   
+		   if(deltaTime > updateTime){
+			   lastUpdateTime = System.nanoTime();
+			   update(deltaTime);
+			   render();
+		   }
+	   }
    }
 
    @Override
