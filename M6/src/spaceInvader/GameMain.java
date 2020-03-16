@@ -107,7 +107,6 @@ public class GameMain implements KeyListener {
 	    if(ship.missile != null && ship.missile.getActive()){
 	    	for(int i= 1; i < spriteList.length ; i++) {
 	    		if(ship.missile.collision(spriteList[i])) {
-	    			System.out.println("Träffad");
 	    			ship.missile.setActive(false);
 	    			removeList.add(spriteList[i]);
 	    			
