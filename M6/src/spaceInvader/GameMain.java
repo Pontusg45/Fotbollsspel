@@ -114,7 +114,7 @@ public class GameMain implements KeyListener {
 	    		}	
 	    	}
 	    }
-	    spriteList.// Alt namnet på arraylist
+	    //spriteList.removeAll(removeList)// Alt namnet på arraylist
 	}
 
  	public void alienMove(long deltaTime) {
