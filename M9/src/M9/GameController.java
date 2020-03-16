@@ -10,8 +10,12 @@ import javax.swing.ImageIcon;
 
 
 public class GameController implements KeyListener {
+	
+	
    private ShipEntity ship;
+   
    private GameView gv;
+   
    private boolean gameRunning = true;
    
    Random rand = new Random();
