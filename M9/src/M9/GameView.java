@@ -28,10 +28,7 @@ public class GameView {
        this.title = title;
        
        createWindow();
-       beginRender();
-       // Skapar vår rityta canvas med rätt bredd och höjd
-       
-       
+       // Skapar vår rityta canvas med rätt bredd och höjd  
    }
    public void render(Drawable[] drawArray) {
 	   Graphics2D g = (Graphics2D)canvas.getGraphics();
@@ -39,26 +36,21 @@ public class GameView {
 	   g.setColor(Color.black);
 	   g.fillRect(0, 0, width, height);
 
-	   for(Drawable drawoObj : drawArray) {
-	       drawoObj.draw(g);
+	   for(int i = 0;i < drawArray.length; i++) {
+		   drawArray[i].draw(g);
+	       
 	   }
 	}
 
 	public void render(Collection<? extends Drawable> drawList) {
-	   Graphics2D g = (Graphics2D)canvas.getGraphics();
-
-	   g.setColor(Color.black);
-	   g.fillRect(0, 0, width, height);
+		beginRender();
 
 	   for(Drawable drawoObj : drawList) {
 	       drawoObj.draw(g);
 	   }
 	}
 	public void render(Drawable drawObj) {
-		   Graphics2D g = (Graphics2D)canvas.getGraphics();
-
-		   g.setColor(Color.black);
-		   g.fillRect(0, 0, width, height);
+		   beginRender();
 
 		   drawObj.draw(g);
 	}
@@ -98,7 +90,9 @@ public class GameView {
 	       jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	       jf.setIgnoreRepaint(true); // Ritas inte om av JVM.       
 	       jf.setVisible(true); // Gör allt synligt!
-	       canvas.requestFocus(); // Ger vår canvas fokus	
+	       canvas.requestFocus(); // Ger vår canvas fokus
+	       canvas.createBufferStrategy(2);
+	       backBuffer = canvas.getBufferStrategy();
 	}
 	 private void beginRender() {
 		 
