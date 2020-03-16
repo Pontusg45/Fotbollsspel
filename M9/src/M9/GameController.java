@@ -1,5 +1,6 @@
 package M9;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.*;
@@ -8,15 +9,15 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
-
 
 public class GameController implements KeyListener {
 	
    private ShipEntity ship;
    
    private GameView gv;
+   
+   private TextEntity msg;
    
    public Font font = null;
    
@@ -44,6 +45,8 @@ public class GameController implements KeyListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+       
+       msg = new TextEntity("Space Invader", 100, 32, font, Color.GREEN);
        
        gv.setKeyListener(this);
        
@@ -116,6 +119,7 @@ public class GameController implements KeyListener {
    
    public void render() {
        gv.render(spriteList);
+       gv.render(msg);
    }
 
    public void run() {

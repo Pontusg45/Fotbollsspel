@@ -50,9 +50,12 @@ public class GameView {
 	   }
 	}
 	public void render(Drawable drawObj) {
-		   beginRender();
+		Graphics2D g = (Graphics2D)canvas.getGraphics();
 
-		   drawObj.draw(g);
+		g.setColor(Color.black);
+		g.fillRect(0, 0, width, height);
+
+		drawObj.draw(g);
 	}
 
 	public int getWidth() {
@@ -116,6 +119,7 @@ public class GameView {
 		 
 		 g.setColor(Color.black);
 		 g.fillRect(0, 0, width, height);
+		 
 		 drawObj.draw(g);
 	 }
 	
