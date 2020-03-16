@@ -21,26 +21,11 @@ public class GameView {
        this.height = height;
        this.width = width;
        this.title = title;
+       
+       createWindow();
 
        // Skapar vår rityta canvas med rätt bredd och höjd
-       canvas = new Canvas();
-       canvas.setSize(new Dimension(width, height));
-
-       // Skapar fönstret.
-       jf = new JFrame(title);
-       // Lägger in ritytan i fönstret.
-       jf.add(canvas);
-
-       // Lite inställningar
-       jf.setResizable(false); // Går ej att ändra storlek på fönster
-       jf.pack(); // Packar så att inget tomrum visas
-       jf.setLocationRelativeTo(null); // Placeras i mitten på skärmen
        
-       // Går att stånga av med x-rutan
-       jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-       jf.setIgnoreRepaint(true); // Ritas inte om av JVM.       
-       jf.setVisible(true); // Gör allt synligt!
-       canvas.requestFocus(); // Ger vår canvas fokus
        
    }
    public void render(Drawable[] drawArray) {
@@ -71,7 +56,48 @@ public class GameView {
 		   g.fillRect(0, 0, width, height);
 
 		   drawObj.draw(g);
-		}
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
+	private void createWindow() {
+		
+		canvas = new Canvas();
+	       canvas.setSize(new Dimension(width, height));
+
+	       // Skapar fönstret.
+	       jf = new JFrame(title);
+	       // Lägger in ritytan i fönstret.
+	       jf.add(canvas);
+
+	       // Lite inställningar
+	       jf.setResizable(false); // Går ej att ändra storlek på fönster
+	       jf.pack(); // Packar så att inget tomrum visas
+	       jf.setLocationRelativeTo(null); // Placeras i mitten på skärmen
+	       
+	       // Går att stånga av med x-rutan
+	       jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+	       jf.setIgnoreRepaint(true); // Ritas inte om av JVM.       
+	       jf.setVisible(true); // Gör allt synligt!
+	       canvas.requestFocus(); // Ger vår canvas fokus
+		
+	}
+	
+	
 
 
    
