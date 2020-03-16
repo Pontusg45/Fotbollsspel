@@ -91,12 +91,12 @@ public class GameMain implements KeyListener {
     	}
     	if(keyDown.get("space")) {
     		 ship.tryToFire();
-    		 
     	}
  
     	ship.move(deltaTime);
     	 
     	alienMove(deltaTime);
+    	
     	checkCollisionAndRemove();
 	}
 	
@@ -108,12 +108,11 @@ public class GameMain implements KeyListener {
 	    	for(int i= 1; i < spriteList.length ; i++) {
 	    		if(ship.missile.collision(spriteList[i])) {
 	    			ship.missile.setActive(false);
-	    			removeList.add(spriteList[i]);
-	    			
+	    			removeList.add(spriteList[i]);	
 	    		}	
 	    	}
 	    }
-	    //spriteList.removeAll(removeList)// Alt namnet på arraylist
+	    spriteList.removeAll(removeList)// Alt namnet på arraylist
 	}
 
  	public void alienMove(long deltaTime) {
