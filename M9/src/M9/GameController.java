@@ -1,7 +1,10 @@
 package M9;
 
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.*;
+import java.io.File;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -14,6 +17,8 @@ public class GameController implements KeyListener {
    private ShipEntity ship;
    
    private GameView gv;
+   
+   public Font font = null;
    
    private boolean gameRunning = true;
    
@@ -29,6 +34,16 @@ public class GameController implements KeyListener {
 
    public GameController(GameView gv) {
        this.gv = gv;
+       
+       try {
+			String path = getClass().getResource("/droidlover.ttf").getFile();
+			path =  URLDecoder.decode(path,"utf-8");
+			   
+			font = Font.createFont(Font.TRUETYPE_FONT, new File(path));
+			font = font.deriveFont(32f); // Typsnittsstorlek
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
        
        gv.setKeyListener(this);
        
