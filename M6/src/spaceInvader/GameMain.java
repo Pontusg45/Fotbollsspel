@@ -33,7 +33,7 @@ public class GameMain implements KeyListener {
 	
 	public Font font = null;
  
-	private GameScreen gameScreen = new GameScreen("Game", 640,480, false);
+	private GameScreen gameScreen = new GameScreen("Game Moment 6 och 8", 640,480, false);
  
 	public GameMain(){
 		
