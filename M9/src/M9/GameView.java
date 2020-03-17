@@ -20,7 +20,7 @@ public class GameView {
    
    public void setKeyListener(KeyListener keyListener) {
 	   canvas.addKeyListener(keyListener);
-	}
+   }
 
    public GameView(int width, int height, String title) {
        this.height = height;
@@ -31,14 +31,14 @@ public class GameView {
        // Skapar vår rityta canvas med rätt bredd och höjd  
    }
    public void render(Drawable[] drawArray) {
-	   Graphics2D g = (Graphics2D)canvas.getGraphics();
+	   beginRender();
+	   /*Graphics2D g = (Graphics2D)canvas.getGraphics();
 
 	   g.setColor(Color.black);
 	   g.fillRect(0, 0, width, height);
-
+	    */
 	   for(int i = 0;i < drawArray.length; i++) {
-		   drawArray[i].draw(g);
-	       
+		   drawArray[i].draw(g);    
 	   }
 	}
 
@@ -49,6 +49,7 @@ public class GameView {
 	       drawoObj.draw(g);
 	   }
 	}
+	
 	public void render(Drawable drawObj) {
 		Graphics2D g = (Graphics2D)canvas.getGraphics();
 
@@ -75,43 +76,42 @@ public class GameView {
 	}
 	
 	private void createWindow() {
-		
 		canvas = new Canvas();
-	       canvas.setSize(new Dimension(width, height));
-
-	       // Skapar fönstret.
-	       jf = new JFrame(title);
-	       // Lägger in ritytan i fönstret.
-	       jf.add(canvas);
-
-	       // Lite inställningar
-	       jf.setResizable(false); // Går ej att ändra storlek på fönster
-	       jf.pack(); // Packar så att inget tomrum visas
-	       jf.setLocationRelativeTo(null); // Placeras i mitten på skärmen
-	       
-	       // Går att stånga av med x-rutan
-	       jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-	       jf.setIgnoreRepaint(true); // Ritas inte om av JVM.       
-	       jf.setVisible(true); // Gör allt synligt!
-	       canvas.requestFocus(); // Ger vår canvas fokus
-	       canvas.createBufferStrategy(2);
-	       backBuffer = canvas.getBufferStrategy();
+		canvas.setSize(new Dimension(width, height));
+		
+		// Skapar fönstret.
+		jf = new JFrame(title);
+		
+		// Lägger in ritytan i fönstret.
+		jf.add(canvas);
+		
+		// Lite inställningar
+		jf.setResizable(false); // Går ej att ändra storlek på fönster
+		jf.pack(); // Packar så att inget tomrum visas
+		jf.setLocationRelativeTo(null); // Placeras i mitten på skärmen
+		
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Går att stånga av med x-rutan 
+		jf.setIgnoreRepaint(true); // Ritas inte om av JVM.       
+		jf.setVisible(true); // Gör allt synligt!
+		canvas.requestFocus(); // Ger vår canvas fokus
+		canvas.createBufferStrategy(2);
+		backBuffer = canvas.getBufferStrategy();
 	}
-	 private void beginRender() {
-		 
-		 g = (Graphics2D)backBuffer.getDrawGraphics();
-
-			if(bgImg == null) {
-				g.setColor(bgColor);
-				g.fillRect(0, 0, width, height);
+	
+	private void beginRender() {
+		g = (Graphics2D)canvas.getGraphics();
+		
+		if(bgImg == null) {
+			g.setColor(bgColor);
+			g.fillRect(0, 0, width, height);
 			}else {
 				g.drawImage(bgImg, 0, 0, width, height, null);
 			}
 	 }
 	 
 	 public void show() {
-			g.dispose();
-			backBuffer.show();
+		 g.dispose();
+		 backBuffer.show();
 	}
 	
 	 public void openRender(Drawable drawObj) {
