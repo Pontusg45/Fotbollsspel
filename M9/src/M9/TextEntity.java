@@ -15,8 +15,8 @@ import java.awt.RenderingHints;
  * @author Henrik Bygren
  *
  */
-public class TextEntity implements Drawable {
-	private int x, y;
+public class TextEntity extends Entity {
+	private int xPos, yPos;
 	private String txt = "";
 	private Font font = null;
 	private Color color = null;
@@ -29,10 +29,11 @@ public class TextEntity implements Drawable {
 	 * @param font	{@link java.awt.Font}
 	 * @param color	{@link java.awt.Color} 
 	 */
-	public TextEntity(String txt, int x, int y, Font font, Color color) {
+	public TextEntity(String txt, int xPos, int yPos, Font font, Color color) {
+		super(xPos, yPos);
 		this.txt = txt;
-		this.x = x;
-		this.y = y;
+		this.xPos = xPos;
+		this.yPos = yPos;
 		this.font = font;
 		this.color = color;
 	}
@@ -43,38 +44,38 @@ public class TextEntity implements Drawable {
 			g.setFont(font);
 		}	
 		g.setColor(color);
-		g.drawString(txt, x, y);
+		g.drawString(txt, xPos, yPos);
 	}
 	
 	/**
 	 * Ã„ndrar x-koordinaten fÃ¶r texten
 	 * @param x	x-koordinaten fÃ¶r texten
 	 */
-	public void setX(int x) {
-		this.x = x;
+	public void setXPos(int xPos) {
+		this.xPos = xPos;
 	}
 	
 	/**
 	 * Ã„ndrar y-koordinaten fÃ¶r texten
 	 * @param y	y-koordinaten fÃ¶r texten
 	 */
-	public void setY(int y) {
-		this.y = y;
+	public void setYPos(int yPos) {
+		this.yPos = yPos;
 	}
 	/**
 	 * x-koordinaten fÃ¶r texten
 	 * @return x-koordinaten fÃ¶r texten
 	 */
-	public int getX() {
-		return x;
+	public int getXPos() {
+		return xPos;
 	}
 	
 	/**
 	 * x-koordinaten fÃ¶r texten
 	 * @return x-koordinaten fÃ¶r texten
 	 */
-	public int getY() {
-		return y;
+	public int getYPos() {
+		return yPos;
 	}
 	
 	/**
@@ -108,6 +109,11 @@ public class TextEntity implements Drawable {
 	 */
 	public void setFont(Color color) {
 		this.color = color;
+	}
+	@Override
+	public void move(long deltaTime) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
