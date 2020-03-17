@@ -4,31 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-/**
- * Instanser av klassen kan presenteras grafiskt i en instans av klasserna {@link se.egy.graphics.JWin}
- *  och {@link se.egy.graphics.GameScreen}.
- * 
- * @see Drawable
- * @see GameScreen
- * @see JWin
- * 
- * @author Henrik Bygren
- *
- */
+
 public class TextEntity extends Entity {
 	private int xPos, yPos;
 	private String txt = "";
 	private Font font = null;
 	private Color color = null;
 	
-	/**
-	 * Konstruktor
-	 * @param txt	Texten
-	 * @param x		Position i x-led
-	 * @param y		Position i y-led
-	 * @param font	{@link java.awt.Font}
-	 * @param color	{@link java.awt.Color} 
-	 */
+
 	public TextEntity(String txt, int xPos, int yPos, Font font, Color color) {
 		super(xPos, yPos);
 		this.txt = txt;
@@ -47,40 +30,37 @@ public class TextEntity extends Entity {
 		g.drawString(txt, xPos, yPos);
 	}
 	
-	/**
-	 * Ã„ndrar x-koordinaten fÃ¶r texten
-	 * @param x	x-koordinaten fÃ¶r texten
-	 */
+	
 	public void setXPos(int xPos) {
 		this.xPos = xPos;
 	}
 	
 	/**
-	 * Ã„ndrar y-koordinaten fÃ¶r texten
-	 * @param y	y-koordinaten fÃ¶r texten
+	 * Ãndrar y-pos 
+	 * @param y-pos 
 	 */
 	public void setYPos(int yPos) {
 		this.yPos = yPos;
 	}
 	/**
-	 * x-koordinaten fÃ¶r texten
-	 * @return x-koordinaten fÃ¶r texten
+	 * x-koordinaten
+	 * @return x-koordinaten 
 	 */
 	public int getXPos() {
 		return xPos;
 	}
 	
 	/**
-	 * x-koordinaten fÃ¶r texten
-	 * @return x-koordinaten fÃ¶r texten
+	 * x-koordinaten
+	 * @return x-koordinaten
 	 */
 	public int getYPos() {
 		return yPos;
 	}
 	
 	/**
-	 * Ã„ndrar texten i containern
-	 * @param txt texten
+	 * Ãndrar texten
+	 * @param txt 
 	 */
 	public void setTxt(String txt) {
 		this.txt = txt;
@@ -95,7 +75,7 @@ public class TextEntity extends Entity {
 	}
 	
 	/**
-	 * Ã„ndrar typsnitt och storlek
+	 * Ãndrar typsnitt
 	 * @param font fonten
 	 */
 	public void setFont(Font font) {
@@ -103,7 +83,7 @@ public class TextEntity extends Entity {
 	}
 	
 	/**
-	 * Ã„ndrar textfÃ¤rgen
+	 * Ãndrar textfärgen
 	 * @param color FÃ¤rgen 
 	 * @see java.awt.Color
 	 */
