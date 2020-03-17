@@ -108,7 +108,7 @@ public class GameController implements KeyListener {
 
 	    // alien <-> missile
 	    if(ship.missile != null && ship.missile.getActive()){
-	    	for(int i= 1; i < spriteList.length ; i++) {
+	    	for(int i= 2; i < spriteList.length ; i++) {
 	    		if(ship.missile.collision(spriteList[i])) {
 	    			ship.missile.setActive(false);
 	    			removeList.add(spriteList[i]);	
