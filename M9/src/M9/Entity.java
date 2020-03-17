@@ -28,6 +28,11 @@ public abstract class Entity implements Drawable {
      	rec = new Rectangle((int)xPos2, (int)yPos2, image.getWidth(null), 
                 image.getHeight(null));
     }
+    
+    public Entity ( double xPos2, double yPos2){ 
+     	this.xPos = xPos2;
+     	this.yPos = yPos2;
+    }
     public Rectangle getRectangle(){
         rec.setLocation((int)xPos, (int)yPos);
         return rec;
