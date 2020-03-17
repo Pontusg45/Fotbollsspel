@@ -20,18 +20,18 @@ public abstract class Entity implements Drawable {
     /**
      * Konstruktor
      */
-    public Entity (Image image, double xPos2, double yPos2, int speed){
+    public Entity (Image image, double xPos, double yPos, int speed){
      	this.image = image;   
-     	this.xPos = xPos2;
-     	this.yPos = yPos2;
+     	this.xPos = xPos;
+     	this.yPos = yPos;
      	this.speed = speed;
-     	rec = new Rectangle((int)xPos2, (int)yPos2, image.getWidth(null), 
+     	rec = new Rectangle((int)xPos, (int)yPos, image.getWidth(null), 
                 image.getHeight(null));
     }
     
-    public Entity ( double xPos2, double yPos2){ 
-     	this.xPos = xPos2;
-     	this.yPos = yPos2;
+    public Entity ( double xPos, double yPos){ 
+     	this.xPos = xPos;
+     	this.yPos = yPos;
     }
     public Rectangle getRectangle(){
         rec.setLocation((int)xPos, (int)yPos);
