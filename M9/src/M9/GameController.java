@@ -34,19 +34,17 @@ public class GameController implements KeyListener {
    Entity[] spriteList = new Entity[7];
 
    public GameController(GameView gv) {
-       this.gv = gv;
+	   this.gv = gv;
        
        try {
-			String path = getClass().getResource("/droidlover.ttf").getFile();
-			path =  URLDecoder.decode(path,"utf-8");
+    	   String path = getClass().getResource("/droidlover.ttf").getFile();
+    	   path =  URLDecoder.decode(path,"utf-8");
 			   
-			font = Font.createFont(Font.TRUETYPE_FONT, new File(path));
-			font = font.deriveFont(32f); // Typsnittsstorlek
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-       
-       //msg = new TextEntity("Space Invader", 100, 32, font, Color.GREEN);
+    	   font = Font.createFont(Font.TRUETYPE_FONT, new File(path));
+    	   font = font.deriveFont(32f); // Typsnittsstorlek
+       } catch (Exception e) {
+    	   e.printStackTrace();
+       } 
        
        gv.setKeyListener(this);
        
@@ -62,7 +60,7 @@ public class GameController implements KeyListener {
        ship = new ShipEntity(shipImg, 300, 300, 100);
        
        spriteList[0] = ship;
-       spriteList[1] = new TextEntity("Space Invader", 100, 32, font, Color.GREEN);
+       spriteList[1] = new TextEntity("Space Invader", 10, 32, font, Color.GREEN);
        spriteList[2] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,20);
        spriteList[3] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,20);
        spriteList[4] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,20);
@@ -131,7 +129,6 @@ public class GameController implements KeyListener {
 	   long lastUpdateTime = System.nanoTime();
 	   
 	   while(gameRunning){
-		   
 		   long deltaTime = System.nanoTime() - lastUpdateTime;
 		   
 		   if(deltaTime > updateTime){
