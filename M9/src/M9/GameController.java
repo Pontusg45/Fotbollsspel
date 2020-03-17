@@ -17,7 +17,7 @@ public class GameController implements KeyListener {
    
    private GameView gv;
    
-   private TextEntity msg;
+  // private TextEntity msg;
    
    public Font font = null;
    
@@ -31,7 +31,7 @@ public class GameController implements KeyListener {
    
    private HashMap<String, Boolean> keyDown = new HashMap<>(); 
 
-   Entity[] spriteList = new Entity[6];
+   Entity[] spriteList = new Entity[7];
 
    public GameController(GameView gv) {
        this.gv = gv;
@@ -46,7 +46,7 @@ public class GameController implements KeyListener {
 			e.printStackTrace();
 		} 
        
-       msg = new TextEntity("Space Invader", 100, 32, font, Color.GREEN);
+       //msg = new TextEntity("Space Invader", 100, 32, font, Color.GREEN);
        
        gv.setKeyListener(this);
        
@@ -62,11 +62,12 @@ public class GameController implements KeyListener {
        ship = new ShipEntity(shipImg, 300, 300, 100);
        
        spriteList[0] = ship;
-       spriteList[1] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,20);
-       spriteList[2] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,20);
-       spriteList[3] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,20);
-       spriteList[4] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-700,20);
-       spriteList[5] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-900,20);
+       spriteList[1] = new TextEntity("Space Invader", 100, 32, font, Color.GREEN);
+       spriteList[2] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,20);
+       spriteList[3] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,20);
+       spriteList[4] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,20);
+       spriteList[5] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-700,20);
+       spriteList[6] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-900,20);
    }
 
    private void update(long deltaTime) {
@@ -90,7 +91,7 @@ public class GameController implements KeyListener {
    }
    public void alienMove(long deltaTime) {
    	
-		for (int i = 1 ; i< spriteList.length ; i++) {
+		for (int i = 2 ; i< spriteList.length ; i++) {
 			if (spriteList[i].getyPos() < gv.getHeight()) {
 				spriteList[i].setDirectionX(1);
 			    spriteList[i].move(deltaTime);
@@ -119,7 +120,7 @@ public class GameController implements KeyListener {
    
    public void render() {
        gv.render(spriteList);
-       gv.render(msg);
+       //gv.render(msg);
    }
 
    public void run() {
