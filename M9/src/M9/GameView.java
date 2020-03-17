@@ -8,35 +8,31 @@ import java.util.Collection;
 import javax.swing.JFrame;
 
 public class GameView {
-   private int height, width;
-   private String title;
+	private int height, width;
+	private String title;
 
-   private JFrame jf; // Fönstret
-   private Canvas canvas; // ritytan där renderingen sker
-   private BufferStrategy backBuffer;
-   private Color bgColor = Color.BLACK; // Svart, default som bakgrund
-   private Image bgImg = null;
-   private Graphics2D g;
+	private JFrame jf; // Fönstret
+	private Canvas canvas; // ritytan där renderingen sker
+	private BufferStrategy backBuffer;
+	private Color bgColor = Color.BLACK; // Svart, default som bakgrund
+	private Image bgImg = null;
+	private Graphics2D g;
    
-   public void setKeyListener(KeyListener keyListener) {
-	   canvas.addKeyListener(keyListener);
-   }
+	public void setKeyListener(KeyListener keyListener) {
+		canvas.addKeyListener(keyListener);
+	}
 
-   public GameView(int width, int height, String title) {
-       this.height = height;
-       this.width = width;
-       this.title = title;
+	public GameView(int width, int height, String title) {
+		this.height = height;
+		this.width = width;
+		this.title = title;
        
-       createWindow();
-       // Skapar vår rityta canvas med rätt bredd och höjd  
+		createWindow();
+		// Skapar vår rityta canvas med rätt bredd och höjd  
    }
    public void render(Drawable[] drawArray) {
 	   beginRender();
-	   /*Graphics2D g = (Graphics2D)canvas.getGraphics();
-
-	   g.setColor(Color.black);
-	   g.fillRect(0, 0, width, height);
-	    */
+	   
 	   for(int i = 0;i < drawArray.length; i++) {
 		   drawArray[i].draw(g);    
 	   }
@@ -122,11 +118,6 @@ public class GameView {
 		 
 		 drawObj.draw(g);
 	 }
-	
-	
-
-
-   
 
 }
 
