@@ -9,4 +9,3 @@ public class GameMain {
 	       gc.run();
 	   }
 	}
-
