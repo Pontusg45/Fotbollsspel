@@ -3,8 +3,10 @@ package M9;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class GameView {
@@ -91,8 +93,8 @@ public class GameView {
 		backBuffer = canvas.getBufferStrategy();
 	}
 	
-	private void beginRender() {
-		g = (Graphics2D)canvas.getGraphics();
+	void beginRender() {
+		g = (Graphics2D)backBuffer.getDrawGraphics();
 		
 		if(bgImg == null) {
 			g.setColor(bgColor);
@@ -107,14 +109,19 @@ public class GameView {
 		 backBuffer.show();
 	}
 	
-	 public void openRender(Drawable drawObj) {
-		 Graphics2D g = (Graphics2D)canvas.getGraphics();
+	 public void openRender(ArrayList<Entity> spriteList) {
+		 Graphics2D g = (Graphics2D)backBuffer.getDrawGraphics();
 		 
 		 g.setColor(Color.black);
 		 g.fillRect(0, 0, width, height);
 		 
-		 drawObj.draw(g);
+		 for(int i = 0;i < spriteList.size(); i++) {
+			   spriteList.get(i).draw(g);    
+		   }
 	 }
-
+	 
+	 public void setBackground(String pathToImage) {
+			bgImg = new ImageIcon(getClass().getResource(pathToImage)).getImage();
+	}
 }
 

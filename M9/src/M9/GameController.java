@@ -15,9 +15,9 @@ public class GameController implements KeyListener {
 	
    private ShipEntity ship;
    
-   private GameView gv;
+   //private Entity background;
    
-  // private TextEntity msg;
+   private GameView gv;
    
    public Font font = null;
    
@@ -29,9 +29,11 @@ public class GameController implements KeyListener {
    
    Image alienImg = new ImageIcon(getClass().getResource("/alien.png")).getImage();
    
+   //Image bgImg = new ImageIcon(getClass().getResource("/background.jpg")).getImage();
+   
    private HashMap<String, Boolean> keyDown = new HashMap<>(); 
 
-   Entity[] spriteList = new Entity[7];
+   ArrayList<Entity> spriteList = new ArrayList<>();
 
    public GameController(GameView gv) {
 	   this.gv = gv;
@@ -41,13 +43,13 @@ public class GameController implements KeyListener {
     	   path =  URLDecoder.decode(path,"utf-8");
 			   
     	   font = Font.createFont(Font.TRUETYPE_FONT, new File(path));
-    	   font = font.deriveFont(32f); // Typsnittsstorlek
+    	   font = font.deriveFont(32f);
        } catch (Exception e) {
     	   e.printStackTrace();
        } 
        
        gv.setKeyListener(this);
-       
+
        keyDown.put("space", false);
        keyDown.put("left", false); 
        keyDown.put("right", false);
@@ -56,16 +58,22 @@ public class GameController implements KeyListener {
    }
 
    private void loadImages() {
+	   
+	   //background = new Entity(0,0, bgImg);
+	   //gv.setBackground(background);
+	   
+	   int shipPosX = gv.getWidth()/2- shipImg.getWidth(null)/2;
+	   int shipPosY = gv.getHeight()- 10 - shipImg.getHeight(null);
+   	
+	   ship = new ShipEntity(shipImg, shipPosX, shipPosY, 100);
        
-       ship = new ShipEntity(shipImg, 300, 300, 100);
-       
-       spriteList[0] = ship;
-       spriteList[1] = new TextEntity("Space Invader", 10, 32, font, Color.GREEN);
-       spriteList[2] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,20);
-       spriteList[3] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,20);
-       spriteList[4] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,20);
-       spriteList[5] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-700,20);
-       spriteList[6] = new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-900,20);
+       spriteList.add(ship);
+       spriteList.add(new TextEntity("Space Invader", 10, 32, font, Color.GREEN));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-700,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-900,50));
    }
 
    private void update(long deltaTime) {
@@ -87,38 +95,40 @@ public class GameController implements KeyListener {
 	   	
 	   	checkCollisionAndRemove();
    }
+   
    public void alienMove(long deltaTime) {
    	
-		for (int i = 2 ; i< spriteList.length ; i++) {
-			if (spriteList[i].getyPos() < gv.getHeight()) {
-				spriteList[i].setDirectionX(1);
-			    spriteList[i].move(deltaTime);
+		for (int i = 2 ; i< spriteList.size(); i++) {
+			if (spriteList.get(i).getyPos() < gv.getHeight()) {
+				spriteList.get(i).setDirectionX(1);
+				spriteList.get(i).move(deltaTime);
 			}
 			else { 
-				spriteList[i].setyPos(-1 * alienImg.getHeight(null));
-				spriteList[i].setxPos(rand.nextInt(gv.getWidth() / alienImg.getWidth(null)) * alienImg.getWidth(null));
+				spriteList.get(i).setyPos(-1 * alienImg.getHeight(null));
+				spriteList.get(i).setxPos(rand.nextInt(gv.getWidth() / alienImg.getWidth(null)) * alienImg.getWidth(null));
 			}
 		}
 	}
    
    public void checkCollisionAndRemove(){
-	    ArrayList<Entity> removeList = new ArrayList<>();
+	    ArrayList<Entity> removeList = new ArrayList<Entity>();
 
 	    // alien <-> missile
 	    if(ship.missile != null && ship.missile.getActive()){
-	    	for(int i= 2; i < spriteList.length ; i++) {
-	    		if(ship.missile.collision(spriteList[i])) {
+	    	for(int i= 2; i < spriteList.size() ; i++) {
+	    		if(ship.missile.collision(spriteList.get(i)) || ship.missile.getyPos() < 0) {
 	    			ship.missile.setActive(false);
-	    			removeList.add(spriteList[i]);	
+	    			removeList.add(spriteList.get(i));	
 	    		}	
 	    	}
 	    }
-	    //spriteList.removeAll(removeList);// Alt namnet på arraylist  
+	    spriteList.removeAll(removeList);// Alt namnet på arraylist  
 	}
    
    public void render() {
-       gv.render(spriteList);
-       //gv.render(msg);
+	   gv.beginRender();
+       gv.openRender(spriteList);
+       gv.show();
    }
 
    public void run() {
@@ -140,32 +150,32 @@ public class GameController implements KeyListener {
    }
 
    @Override
-   public void keyTyped(KeyEvent e) {
-
-   }
-
-   @Override
    public void keyPressed(KeyEvent e) {
-		
-   	int key = e.getKeyCode(); 
+	   int key = e.getKeyCode(); 
 
-   	if(key == KeyEvent.VK_LEFT) 
-       	keyDown.put("left", true); 
-   	else if(key == KeyEvent.VK_RIGHT) 
-       	keyDown.put("right", true);
-   	else if(key == KeyEvent.VK_SPACE) 
-       	keyDown.put("space", true);
+	   if(key == KeyEvent.VK_LEFT) 
+		   keyDown.put("left", true); 
+	   else if(key == KeyEvent.VK_RIGHT) 
+		   keyDown.put("right", true);
+	   else if(key == KeyEvent.VK_SPACE) 
+		   keyDown.put("space", true);
 	}
 
 	public void keyReleased(KeyEvent e) {
-   	int key = e.getKeyCode(); 
+		int key = e.getKeyCode(); 
 
-   	if(key == KeyEvent.VK_LEFT) 
-       	keyDown.put("left", false); 
-   	else if(key == KeyEvent.VK_RIGHT) 
-       	keyDown.put("right", false);
-   	else if(key == KeyEvent.VK_SPACE) 
-       	keyDown.put("space", false);
+		if(key == KeyEvent.VK_LEFT) 
+			keyDown.put("left", false); 
+		else if(key == KeyEvent.VK_RIGHT) 
+			keyDown.put("right", false);
+		else if(key == KeyEvent.VK_SPACE) 
+			keyDown.put("space", false);
 	}
+	
+	 @Override
+	   public void keyTyped(KeyEvent e) {
+
+	   }
+	 
 }
 
