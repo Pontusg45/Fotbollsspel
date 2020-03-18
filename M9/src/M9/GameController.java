@@ -23,6 +23,8 @@ public class GameController implements KeyListener {
    
    private boolean gameRunning = true;
    
+   private int points;
+   
    Random rand = new Random();
    
    Image shipImg = new ImageIcon(getClass().getResource("/ship.png")).getImage();
@@ -69,6 +71,7 @@ public class GameController implements KeyListener {
        
        spriteList.add(ship);
        spriteList.add(new TextEntity("Space Invader", 10, 32, font, Color.GREEN));
+       spriteList.add(new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN));
        spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,50));
        spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,50));
        spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,50));
@@ -94,11 +97,14 @@ public class GameController implements KeyListener {
 	   	ship.move(deltaTime);
 	   	
 	   	checkCollisionAndRemove();
+	   	
+	   	spriteList.get(2).setTxt("Score: " + getPoints());
+	   	spriteList.get(2).getTxt();
    }
    
    public void alienMove(long deltaTime) {
    	
-		for (int i = 2 ; i< spriteList.size(); i++) {
+		for (int i = 3 ; i< spriteList.size(); i++) {
 			if (spriteList.get(i).getyPos() < gv.getHeight()) {
 				spriteList.get(i).setDirectionX(1);
 				spriteList.get(i).move(deltaTime);
@@ -113,16 +119,18 @@ public class GameController implements KeyListener {
    public void checkCollisionAndRemove(){
 	    ArrayList<Entity> removeList = new ArrayList<Entity>();
 
-	    // alien <-> missile
 	    if(ship.missile != null && ship.missile.getActive()){
-	    	for(int i= 2; i < spriteList.size() ; i++) {
+	    	for(int i= 3; i < spriteList.size() ; i++) {
 	    		if(ship.missile.collision(spriteList.get(i)) || ship.missile.getyPos() < 0) {
 	    			ship.missile.setActive(false);
-	    			removeList.add(spriteList.get(i));	
-	    		}	
+	    			removeList.add(spriteList.get(i));
+	    			spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),- alienImg.getHeight(null),50));
+	    			setPoints(getPoints()+ 100);
+	    			
+	    		}
 	    	}
 	    }
-	    spriteList.removeAll(removeList);// Alt namnet på arraylist  
+	    spriteList.removeAll(removeList); 
 	}
    
    public void render() {
@@ -176,6 +184,14 @@ public class GameController implements KeyListener {
 	   public void keyTyped(KeyEvent e) {
 
 	   }
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
 	 
 }
 
