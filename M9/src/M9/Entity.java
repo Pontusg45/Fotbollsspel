@@ -10,8 +10,18 @@ public abstract class Entity implements Drawable {
     protected double xPos, yPos;   // Positionen
    
     protected int speed;           // Hastighet i px/sekund
+    
+    protected String txt;
    
-    protected int dx = 0, dy = 0;  // Rörelseriktning
+    public String getTxt() {
+		return txt;
+	}
+
+	public void setTxt(String txt) {
+		this.txt = txt;
+	}
+
+	protected int dx = 0, dy = 0;  // Rörelseriktning
    
     private boolean active = true; // Gör alla nya objekt aktiva.
     
@@ -29,10 +39,18 @@ public abstract class Entity implements Drawable {
                 image.getHeight(null));
     }
     
-    public Entity ( double xPos, double yPos){ 
+    public Entity (String txt, double xPos, double yPos){ 
      	this.xPos = xPos;
      	this.yPos = yPos;
     }
+    
+    /**
+     * Ritar bilden på ytan g
+     */
+    public void draw(Graphics2D g) {
+     	g.drawImage(image,(int)xPos,(int)yPos,null);
+    }
+    
     public Rectangle getRectangle(){
         rec.setLocation((int)xPos, (int)yPos);
         return rec;
@@ -53,7 +71,6 @@ public abstract class Entity implements Drawable {
 	public int getSpeed() {
 		return speed;
 	}
-
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
@@ -61,7 +78,6 @@ public abstract class Entity implements Drawable {
 	public double getxPos() {
 		return xPos;
 	}
-
 	public void setxPos(double xPos) {
 		this.xPos = xPos;
 	}
@@ -69,18 +85,11 @@ public abstract class Entity implements Drawable {
 	public double getyPos() {
 		return yPos;
 	}
-
 	public void setyPos(double yPos) {
 		this.yPos = yPos;
 	}
-
-	/**
-     * Ritar bilden på ytan g
-     */
-    public void draw(Graphics2D g) {
-     	g.drawImage(image,(int)xPos,(int)yPos,null);
-    }
-   
+	
+	
     /**
      * Vilken riktning i x-led
      * @param dx 0 = stilla, 1 = höger, -1 = vänster
@@ -88,7 +97,6 @@ public abstract class Entity implements Drawable {
     public void setDirectionX(int dx){
      	this.dx = dx;
     }
-   
     /**
      * Vilken riktning i y-led
      * @param dy 0 = stilla, 1 = höger, -1 = vänster

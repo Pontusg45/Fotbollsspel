@@ -8,13 +8,13 @@ import java.awt.RenderingHints;
 public class TextEntity extends Entity {
 	
 	private int xPos, yPos;
-	private String text;
+	private String txt;
 	private Font font = null;
 	private Color color = null;
 
-	public TextEntity(String text, int xPos, int yPos, Font font, Color color) {
-		super(xPos, yPos);
-		this.text = text;
+	public TextEntity(String txt, int xPos, int yPos, Font font, Color color) {
+		super(txt ,xPos, yPos);
+		this.txt = txt;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.font = font;
@@ -28,28 +28,7 @@ public class TextEntity extends Entity {
 			g.setFont(font);
 		}	
 		g.setColor(color);
-		g.drawString(text, xPos, yPos);
-	}
-	
-	public void setXPos(int xPos) {
-		this.xPos = xPos;
-	}
-	public int getXPos() {
-		return xPos;
-	}
-	
-	public void setYPos(int yPos) {
-		this.yPos = yPos;
-	}
-	public int getYPos() {
-		return yPos;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
-	}
-	public String getText() {
-		return text;
+		g.drawString(txt, xPos, yPos);
 	}
 	
 	public void setFont(Font font) {
