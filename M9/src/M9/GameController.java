@@ -11,11 +11,12 @@ import java.util.HashMap;
 import java.util.Random;
 import javax.swing.ImageIcon;
 
+
 public class GameController implements KeyListener {
 	
    private ShipEntity ship;
    
-   //private Entity background;
+   private TextEntity Points;
    
    private GameView gv;
    
@@ -25,13 +26,13 @@ public class GameController implements KeyListener {
    
    private int points;
    
+   String bgIMg = "/background.jpg";
+   
    Random rand = new Random();
    
    Image shipImg = new ImageIcon(getClass().getResource("/ship.png")).getImage();
    
    Image alienImg = new ImageIcon(getClass().getResource("/alien.png")).getImage();
-   
-   //Image bgImg = new ImageIcon(getClass().getResource("/background.jpg")).getImage();
    
    private HashMap<String, Boolean> keyDown = new HashMap<>(); 
 
@@ -61,22 +62,22 @@ public class GameController implements KeyListener {
 
    private void loadImages() {
 	   
-	   //background = new Entity(0,0, bgImg);
-	   //gv.setBackground(background);
+	   gv.setBackground(bgIMg);
 	   
 	   int shipPosX = gv.getWidth()/2- shipImg.getWidth(null)/2;
 	   int shipPosY = gv.getHeight()- 10 - shipImg.getHeight(null);
    	
-	   ship = new ShipEntity(shipImg, shipPosX, shipPosY, 100);
+	   ship = new ShipEntity(shipImg, shipPosX, shipPosY, 200);
        
+	   Points = new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN);
        spriteList.add(ship);
        spriteList.add(new TextEntity("Space Invader", 10, 32, font, Color.GREEN));
-       spriteList.add(new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN));
-       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-100,50));
-       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-300,50));
-       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-500,50));
-       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-700,50));
-       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-900,50));
+       spriteList.add(Points);
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*1,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*3,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*5,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*7,50));
+       spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*9,50));
    }
 
    private void update(long deltaTime) {
@@ -99,7 +100,7 @@ public class GameController implements KeyListener {
 	   	checkCollisionAndRemove();
 	   	
 	   	spriteList.get(2).setTxt("Score: " + getPoints());
-	   	spriteList.get(2).getTxt();
+	   	System.out.println(spriteList.get(2).getTxt());
    }
    
    public void alienMove(long deltaTime) {
@@ -110,7 +111,7 @@ public class GameController implements KeyListener {
 				spriteList.get(i).move(deltaTime);
 			}
 			else { 
-				spriteList.get(i).setyPos(-1 * alienImg.getHeight(null));
+				spriteList.get(i).setyPos(-alienImg.getHeight(null));
 				spriteList.get(i).setxPos(rand.nextInt(gv.getWidth() / alienImg.getWidth(null)) * alienImg.getWidth(null));
 			}
 		}
@@ -121,12 +122,14 @@ public class GameController implements KeyListener {
 
 	    if(ship.missile != null && ship.missile.getActive()){
 	    	for(int i= 3; i < spriteList.size() ; i++) {
-	    		if(ship.missile.collision(spriteList.get(i)) || ship.missile.getyPos() < 0) {
+	    		if(ship.missile.collision(spriteList.get(i))) {
 	    			ship.missile.setActive(false);
 	    			removeList.add(spriteList.get(i));
 	    			spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),- alienImg.getHeight(null),50));
-	    			setPoints(getPoints()+ 100);
-	    			
+	    			setPoints(getPoints()+ 100);		
+	    		}
+	    		else if (ship.missile.getyPos() < 0){
+	    			ship.missile.setActive(false);	
 	    		}
 	    	}
 	    }
