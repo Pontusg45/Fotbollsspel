@@ -89,6 +89,7 @@ public class GameView {
 		jf.setIgnoreRepaint(true); // Ritas inte om av JVM.       
 		jf.setVisible(true); // Gör allt synligt!
 		canvas.requestFocus(); // Ger vår canvas fokus
+		
 		canvas.createBufferStrategy(2);
 		backBuffer = canvas.getBufferStrategy();
 	}
@@ -112,9 +113,6 @@ public class GameView {
 	 public void openRender(ArrayList<Entity> spriteList) {
 		 Graphics2D g = (Graphics2D)backBuffer.getDrawGraphics();
 		 
-		 g.setColor(Color.black);
-		 g.fillRect(0, 0, width, height);
-		 
 		 for(int i = 0;i < spriteList.size(); i++) {
 			   spriteList.get(i).draw(g);    
 		   }
@@ -122,6 +120,6 @@ public class GameView {
 	 
 	 public void setBackground(String pathToImage) {
 			bgImg = new ImageIcon(getClass().getResource(pathToImage)).getImage();
-	}
+		} 
 }
 
