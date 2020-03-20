@@ -33,7 +33,7 @@ public class ShipEntity extends Entity{
  	
  	public boolean tryToFire(){
  	    if(missile == null || !missile.getActive()){
- 	        missile = new MissileEntity(new ImageIcon(getClass().getResource("/missile.png")).getImage(), xPos+13, yPos, 90);
+ 	        missile = new MissileEntity(new ImageIcon(getClass().getResource("/missile.png")).getImage(), xPos+13, yPos, 130);
  	        missile.setActive(true);
  	        return true;
  	    }else
