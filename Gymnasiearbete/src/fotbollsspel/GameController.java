@@ -4,25 +4,30 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.Color;
 import java.awt.Image;
 import java.lang.String;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import se.egy.graphics.Drawable;
-import se.egy.graphics.GameScreen;
-import se.egy.graphics.TxtContainer;
 
-public class Fotbollsspel implements MouseListener{
+//import se.egy.graphics.TxtContainer;
+
+public class GameController implements MouseListener{
+	
+	private GameView gv;
 	
 	private boolean gameRunning = true;
 	
 	Image backgroundImg = new ImageIcon(getClass().getResource("/bakgrund.png")).getImage();
+	private String bgImg = "/bakgrund.png";
 	Image ballImg = new ImageIcon(getClass().getResource("/ball.png")).getImage();
 	Image goalkeeperImg = new ImageIcon(getClass().getResource("/målvakt.png")).getImage();
 
-	private boolean Save, Wide, High, Goal = false;
+	//private boolean Save, Wide, High, Goal = false;
 	private boolean Shot = false;
 	private boolean checkGoal = false;
 	//private boolean multiplayer = false;
@@ -35,18 +40,24 @@ public class Fotbollsspel implements MouseListener{
 	private long lastUpdateTime;
 	
 	private BallEntity ball;
-	private Entity bakgrund;
+	
 	private BallEntity goalkeeper;
 	
 	private String amountOfPlayers;
 	private int amountOfRounds;
+	
+	private TextEntity scoreboard;
+	//private TxtContainer high, save, wide;
 
-	private TxtContainer scoreboard;
-	private TxtContainer high, save, goal, wide;
-	
-	private double ballPosX = (backgroundImg.getWidth(null)/2)-ballImg.getWidth(null)/2;
+	//private TextEntity goal;
+	/**
+	 * Bollens start positioner.
+	 */
+	private double ballPosX;
 	private double ballPosY = 400;
-	
+	/**
+	 * Målvaktens start positioner.
+	 */
 	private int goalkeeperPosX = 233;
 	private int goalkeeperPosY = 160;
 	
@@ -59,9 +70,13 @@ public class Fotbollsspel implements MouseListener{
 	 * Bollens hastighet i y och x-led.
 	 */
 	private double velocityX, velocityY; 
-	
+	/**
+	 * Tiden det tar för bollen att flytta sg.
+	 */
 	private double timeForShot = 0.4;
-	
+	/**
+	 * Variabler för poängstavlan.
+	 */
 	private int goals, rounds, miss;
 	
 	private String ScoreboardSingleplayer = "Missar: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + "Runda: " + getRounds();
@@ -70,7 +85,7 @@ public class Fotbollsspel implements MouseListener{
 	
 	private String Scoreboard;
 	
-	private int width = 640, height = 480;
+	//private int width = 640, height = 480;
 	
 	private Random rand = new Random();
 	
@@ -78,9 +93,12 @@ public class Fotbollsspel implements MouseListener{
 	
 	private HashMap<String, Boolean> mouseDown = new HashMap<>();
 	
-	private GameScreen gameScreen = new GameScreen("Fotbollsspel", width, height, false);
+	ArrayList<Entity> spriteList = new ArrayList<>();
 	
-	public Fotbollsspel() {
+	 
+	
+	public GameController(GameView gv) {
+		   this.gv = gv;
 		
 		amountOfPlayers = JOptionPane.showInputDialog("1 eller 2 spelare?");
 		amountOfRounds = Integer.parseInt(JOptionPane.showInputDialog("Hur många rundor?"));
@@ -93,38 +111,43 @@ public class Fotbollsspel implements MouseListener{
 	    	//multiplayer = true;
 	    }
 		
-		gameScreen.setMouseListner((MouseListener) this);
+		gv.setMouseListner((MouseListener) this);
 		
 	    mouseDown.put("clicked", false);
 	    loadImages();
-	    gameLoop();   
+	      
 	}
 	/**
 	 * Laddar in spelets bilder och textobjekt.
 	 */
 	public void loadImages(){
 		
-		bakgrund = new Entity(0, 0, backgroundImg);
-	    gameScreen.setBackground(bakgrund); 
+	    gv.setBackground(bgImg); 
 	    	
+	    setBallPosX((gv.getWidth()/2)-ballImg.getWidth(null)/2);
+	    
 	    goalkeeper = new BallEntity(goalkeeperPosX, goalkeeperPosY, goalkeeperImg,10, 0);
 	    
 	    ball = new BallEntity(ballPosX, ballPosY, ballImg,getVelocityX(), getVelocityY());
 	    
-	    goal = new TxtContainer("Mål!!", 100, 100, null, Color.white);
+	   /* goal = new TextEntity("Mål!!", 100, 100, null, Color.white);
 	    
-	    high = new TxtContainer("För högt", 100, 100, null, Color.white);
+	    high = new TextEntiy("För högt", 100, 100, null, Color.white);
 	    
-	    save = new TxtContainer("Räddad", 100, 100, null, Color.white);
+	    save = new TextEntity("Räddad", 100, 100, null, Color.white);
 	    
-	    wide = new TxtContainer("För brett", 100, 100, null, Color.white);  
+	    wide = new TextEntity("För brett", 100, 100, null, Color.white); */ 
 	   
-	    scoreboard = new TxtContainer(Scoreboard, 100 , 100, null, Color.white);   
+	    scoreboard = new TextEntity(Scoreboard, 100 , 100, null, Color.white);
+	    
+	    spriteList.add(goalkeeper);
+	    spriteList.add(ball);
+	    spriteList.add(scoreboard);
 	}
 	/**
 	 * Loopar igenom programmet när gamerunning är true.
 	 */
-	public void gameLoop(){
+	public void run(){
 		
 		lastUpdateTime = System.nanoTime(); 
 		
@@ -152,11 +175,11 @@ public class Fotbollsspel implements MouseListener{
 			
 			goalkeeperMovement(deltaTime);
 			
-			if (ball.getY() <= (getMousePosY() - (ballImg.getWidth(null)/2))) {
+			if (ball.getYPos() <= (getMousePosY() - (ballImg.getWidth(null)/2))) {
 				ball.setSpeed(0, 0);	
 			
 				//checkGoal = true;
-				//Shot = false; 
+				Shot = false; 
 				checkGoal();
 				console();
 				
@@ -189,13 +212,9 @@ public class Fotbollsspel implements MouseListener{
 	 */
 	public void render() {
 		
-		Drawable[] footBallObj  = new Drawable[3];
-		
-		footBallObj[0] = goalkeeper;
-		footBallObj[1] = ball;
-		footBallObj[2] = scoreboard;
-			
-		gameScreen.render(footBallObj);
+		gv.beginRender();
+	       gv.openRender(spriteList);
+	       gv.show();
 	}
 	/**
 	 * Flyttar bollens y-och x-position med hjälp av tiden och musens koordinater.
@@ -234,24 +253,24 @@ public class Fotbollsspel implements MouseListener{
 	 */
 	public void checkGoal() {	
 		
-		if (getMousePosX() >= goalkeeper.getX() 
-		 && getMousePosX() <= goalkeeper.getX() + goalkeeperImg.getWidth(null) 
-		 && getMousePosY() >= goalkeeper.getY() 
-		 && getMousePosY() <= goalkeeper.getY() + goalkeeperImg.getHeight(null)) {
+		if (getMousePosX() >= goalkeeper.getXPos() 
+		 && getMousePosX() <= goalkeeper.getXPos() + goalkeeperImg.getWidth(null) 
+		 && getMousePosY() >= goalkeeper.getYPos() 
+		 && getMousePosY() <= goalkeeper.getYPos() + goalkeeperImg.getHeight(null)) {
 			
-			Save = true;
+			//Save = true;
 			setMiss(miss + 1);
 		}
 		else if (getMousePosY() <= 131 ) {
-			High = true;
+			//High = true;
 			setMiss(miss + 1);
 		}	
 		else if (getMousePosX() <= 70 || getMousePosX() >= 570) {
-			Wide = true;
+			//Wide = true;
 			setMiss(miss + 1);
 		}
 		else {
-			Goal = true;
+			//Goal = true;
 			setGoals(goals + 1);
 			if(player1 == true) {
 				setPlayer1Point(player1Point + 1);
@@ -263,20 +282,20 @@ public class Fotbollsspel implements MouseListener{
 		setRounds(rounds +1);
 		
 		if (amountOfPlayers.equals("1")) {
-	    	scoreboard.setTxt("Missar: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + " | Runda " + getRounds());
+	    	scoreboard.setText("Missar: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + " | Runda " + getRounds());
 	    	
 	    }
 	    else if (amountOfPlayers.equals("2")) {
-	    	scoreboard.setTxt("Spelare 1: "+ getPlayer1Point() + " - " + "Spelare 2: "+ getPlayer2Point() + " | Runda " + (getRounds()/2 +1));
+	    	scoreboard.setText("Spelare 1: "+ getPlayer1Point() + " - " + "Spelare 2: "+ getPlayer2Point() + " | Runda " + (getRounds()/2 +1));
 	    }	
 	}
 	/**
 	 * Renderar skottets resultat.
 	 */
-	public void renderPoint() {
+	/*public void renderPoint() {
 		if(Save) {
 			
-			gameScreen.render(save);
+			gv.render(save);
 			try {
 				Thread.sleep(800);
 				Save = false;
@@ -284,7 +303,7 @@ public class Fotbollsspel implements MouseListener{
 		}
 		else if(Goal) {
 	
-			gameScreen.render(goal);
+			gv.render(goal);
 			
 			try {		
 				Thread.sleep(800);
@@ -310,7 +329,7 @@ public class Fotbollsspel implements MouseListener{
 				High = false;
 			}catch (InterruptedException e) {}	
 		}
-	} 
+	} */
 	/**
 	 * Skriver ut resultaten efter varje skott i konsolen.
 	 */
@@ -327,7 +346,7 @@ public class Fotbollsspel implements MouseListener{
 	public void reset() {						
 		goalkeeper.setX(233);
     	goalkeeper.setY(160);
-    	ball.setX((backgroundImg.getWidth(null)/2)-ballImg.getWidth(null)/2);
+    	ball.setX((gv.getWidth()/2)-ballImg.getWidth(null)/2);
     	ball.setY(400);
     }
 	/**
@@ -359,7 +378,7 @@ public class Fotbollsspel implements MouseListener{
 			 setPlayer2Point(0);
 			 setPlayer1Point(0);
 			 setRounds(0); 
-			 scoreboard.setTxt(Scoreboard);
+			 scoreboard.setText(Scoreboard);
 			 return;
 		}
 		else if (result == JOptionPane.NO_OPTION) {
@@ -386,6 +405,10 @@ public class Fotbollsspel implements MouseListener{
 		setMousePosY(e.getY());			
     }
 	
+    public void setBallPosX(int ballPosX) {
+    	this.ballPosX = ballPosX;
+    }
+    
     public int getMousePosX() {
 		return mousePosX;
 	}
@@ -493,8 +516,6 @@ public class Fotbollsspel implements MouseListener{
 	public void setScoreboard(String scoreboard) {
 		Scoreboard = scoreboard;
 	}
-	public static void main(String[] args) {
-		new Fotbollsspel();
-	}
+	
 	
 }
