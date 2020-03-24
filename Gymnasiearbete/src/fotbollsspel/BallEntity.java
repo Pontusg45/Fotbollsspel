@@ -11,7 +11,7 @@ public class BallEntity extends Entity {
 	private double speed;
 	
     public BallEntity( double xPos, double yPos,Image image, double speedX, double speedY) {
-        super( xPos, yPos, image);
+        super( image, yPos, xPos);
         directionY = 1;
         directionX = 1;
        
@@ -24,8 +24,8 @@ public class BallEntity extends Entity {
     }
 
 	public void move(long deltaTime) {
-        setY((getY() + directionY*(deltaTime/1000000000.0)*speedY));
-        setX((getX() + directionX*(deltaTime/1000000000.0)*speedX));
+        setY((getYPos() + directionY*(deltaTime/1000000000.0)*speedY));
+        setX((getXPos() + directionX*(deltaTime/1000000000.0)*speedX));
     }
 	
 	public double getSpeed() {
