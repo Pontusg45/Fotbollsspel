@@ -11,12 +11,11 @@ import java.util.HashMap;
 import java.util.Random;
 import javax.swing.ImageIcon;
 
-
 public class GameController implements KeyListener {
 	
    private ShipEntity ship;
    
-   private TextEntity Points;
+   //private TextEntity Points;
    
    private GameView gv;
    
@@ -69,10 +68,10 @@ public class GameController implements KeyListener {
    	
 	   ship = new ShipEntity(shipImg, shipPosX, shipPosY, 200);
        
-	   Points = new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN);
+	  // Points = new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN);
        spriteList.add(ship);
        spriteList.add(new TextEntity("Space Invader", 10, 32, font, Color.GREEN));
-       spriteList.add(Points);
+       spriteList.add(new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN));
        spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*1,50));
        spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*3,50));
        spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*5,50));
