@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 public class TextEntity extends Entity {
-	
+
 	private int xPos, yPos;
 	private String txt;
 	private Font font = null;
@@ -20,7 +20,7 @@ public class TextEntity extends Entity {
 		this.font = font;
 		this.color = color;
 	}
-	
+
 	@Override
 	public void draw(Graphics2D g) {	
 		if(font != null) {
@@ -30,7 +30,7 @@ public class TextEntity extends Entity {
 		g.setColor(color);
 		g.drawString(txt, xPos, yPos);
 	}
-	
+
 	public void setFont(Font font) {
 		this.font = font;
 	}
@@ -41,5 +41,5 @@ public class TextEntity extends Entity {
 	public void move(long deltaTime) {
 		// TODO Auto-generated method stub	
 	}
-	
+
 }
