@@ -15,13 +15,15 @@ public class GameController implements KeyListener {
 
 	private ShipEntity ship;
 
-	//private TextEntity Points;
+	private TextEntity Points;
 
 	private GameView gv;
 
 	public Font font = null;
 
 	private boolean gameRunning = true;
+	
+	private String pointCounter = "Poäng = " + getPoints();
 
 	private int points;
 
@@ -61,10 +63,6 @@ public class GameController implements KeyListener {
 
 	private void loadImages() {
 
-
-
-		gv.setBackgroundColor(Color.green);
-
 		gv.setBackground(bgIMg);
 
 		int shipPosX = gv.getWidth()/2- shipImg.getWidth(null)/2;
@@ -72,17 +70,34 @@ public class GameController implements KeyListener {
 
 		ship = new ShipEntity(shipImg, shipPosX, shipPosY, 200);
 
-		// Points = new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN);
+		Points = new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN);
 		spriteList.add(ship);
 		spriteList.add(new TextEntity("Space Invader", 10, 32, font, Color.GREEN));
-		spriteList.add(new TextEntity("Score: " + getPoints(), 600, 32, font, Color.GREEN));
+		spriteList.add(new TextEntity(pointCounter, 600, 32, font, Color.GREEN));
 		spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*1,50));
 		spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*3,50));
 		spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*5,50));
 		spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*7,50));
 		spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),-alienImg.getHeight(null)*9,50));
 	}
+	
+	public void run() { 	   
+		int fps = 50;
+		int updateTime = (int)(1.0/fps*1000000000.0);
 
+		long lastUpdateTime = System.nanoTime();
+
+		while(gameRunning){
+			long deltaTime = System.nanoTime() - lastUpdateTime;
+
+			if(deltaTime > updateTime){
+				lastUpdateTime = System.nanoTime();
+				update(deltaTime);
+				render();
+			}
+		}
+	}
+	
 	private void update(long deltaTime) {
 
 		if(keyDown.get("right") && ship.getxPos() < gv.getWidth() - shipImg.getWidth(null) ) { 
@@ -101,12 +116,16 @@ public class GameController implements KeyListener {
 		ship.move(deltaTime);
 
 		checkCollisionAndRemove();
-		/*
-	   	spriteList.get(2).setTxt("Score: " + getPoints());
-	   	System.out.println(spriteList.get(2).getTxt());
-		 */
+		   
+	   	System.out.println(Points.getTxt()); 
 	}
-
+	
+	public void render() {
+		gv.beginRender();
+		gv.render(spriteList);
+		gv.show();
+	}
+	
 	public void alienMove(long deltaTime) {
 
 		for (int i = 3 ; i< spriteList.size(); i++) {
@@ -130,37 +149,17 @@ public class GameController implements KeyListener {
 					ship.missile.setActive(false);
 					removeList.add(spriteList.get(i));
 					spriteList.add(new AlienEntity(alienImg, rand.nextInt(gv.getWidth() / alienImg.getWidth(null))* alienImg.getWidth(null),- alienImg.getHeight(null),50));
-					setPoints(getPoints()+ 100);		
+					setPoints(getPoints()+ 100);
+					Points.setTxt("Score: " + getPoints());
+					
 				}
 				else if (ship.missile.getyPos() < 0){
 					ship.missile.setActive(false);	
 				}
 			}
 		}
-		spriteList.removeAll(removeList); 
-	}
-
-	public void render() {
-		gv.beginRender();
-		gv.render(spriteList);
-		gv.show();
-	}
-
-	public void run() { 	   
-		int fps = 50;
-		int updateTime = (int)(1.0/fps*1000000000.0);
-
-		long lastUpdateTime = System.nanoTime();
-
-		while(gameRunning){
-			long deltaTime = System.nanoTime() - lastUpdateTime;
-
-			if(deltaTime > updateTime){
-				lastUpdateTime = System.nanoTime();
-				update(deltaTime);
-				render();
-			}
-		}
+		spriteList.removeAll(removeList);
+		Points.setTxt("Score: " + getPoints());
 	}
 
 	@Override
@@ -173,6 +172,14 @@ public class GameController implements KeyListener {
 			keyDown.put("right", true);
 		else if(key == KeyEvent.VK_SPACE) 
 			keyDown.put("space", true);
+	}
+
+	public String getPointCounter() {
+		return pointCounter;
+	}
+
+	public void setPointCounter(String pointCounter) {
+		this.pointCounter = pointCounter;
 	}
 
 	public void keyReleased(KeyEvent e) {

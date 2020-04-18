@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 public abstract class Entity implements Drawable {
+	
 	private Image image;
 
 	protected double xPos, yPos;   // Positionen
@@ -12,14 +13,6 @@ public abstract class Entity implements Drawable {
 	protected int speed;           // Hastighet i px/sekund
 
 	protected String txt;
-
-	public String getTxt() {
-		return txt;
-	}
-
-	public void setTxt(String txt) {
-		this.txt = txt;
-	}
 
 	protected int dx = 0, dy = 0;  // Rörelseriktning
 

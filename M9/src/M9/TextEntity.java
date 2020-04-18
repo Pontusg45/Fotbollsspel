@@ -41,5 +41,13 @@ public class TextEntity extends Entity {
 	public void move(long deltaTime) {
 		// TODO Auto-generated method stub	
 	}
+	
+	public String getTxt() {
+		return txt;
+	}
+
+	public void setTxt(String txt) {
+		this.txt = txt;
+	}
 
 }
