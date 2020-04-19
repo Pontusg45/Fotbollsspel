@@ -64,6 +64,10 @@ public class GameController implements MouseListener{
 
 	private double timeForShot = 0.4;
 	
+	/**
+	 * @hasgetter
+	 * @hassetter
+	 */
 	private int goals, rounds, miss;
 
 	private String ScoreboardSingleplayer = "Missar: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + "Runda: " + getRounds();
