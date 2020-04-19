@@ -3,6 +3,8 @@ package model;
 import java.awt.Image;
 
 /**
+ * En klass som skapar alla objekt med bild och ärver från klassen Entity.
+ * 
  * @author Pontus Gustafsson
  */
 public class ObjectEntity extends Entity {

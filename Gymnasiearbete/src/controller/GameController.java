@@ -64,7 +64,7 @@ public class GameController implements MouseListener{
 
 	private double timeForShot = 0.4;
 	
-	/**
+	/*
 	 * @hasgetter
 	 * @hassetter
 	 */

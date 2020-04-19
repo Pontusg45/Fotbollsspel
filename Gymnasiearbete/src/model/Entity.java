@@ -6,6 +6,8 @@ import java.awt.Image;
 import view.Drawable;
 
 /**
+ * En klass som ritar alla objekt och implementerar gränssnittet Drawable.
+ * 
  * @author Pontus Gustafsson
  */
 public class Entity implements Drawable{
@@ -15,13 +17,27 @@ public class Entity implements Drawable{
     protected double xPos, yPos;   // Positionen
    
     private boolean active = true;
-	
+    
+    /**
+     * Konstruktorn som objectEntity använder
+     * 
+     * @param image bildens instansvariabel
+     * @param xPos objektets x-position
+     * @param yPos objektets y-position
+     */
     public Entity (Image image, double xPos, double yPos){
      	this.image = image;   
      	this.xPos = xPos;
      	this.yPos = yPos;
     }
     
+    /**
+     * Konstruktorn som textEntity använder
+     * 
+     * @param txt textens instans variabel
+     * @param xPos textens x-position
+     * @param yPos textens y- position
+     */
     public Entity (String txt, double xPos, double yPos){ 
      	this.xPos = xPos;
      	this.yPos = yPos;
