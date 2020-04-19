@@ -13,14 +13,12 @@ public class ObjectEntity extends Entity {
 	private int directionX = 1;
 	private double speedX;
 	private double speedY;
-	private double speed;
 	
     public ObjectEntity( double xPos, double yPos,Image image, double speedX, double speedY) {
         super( image, yPos, xPos);
         directionY = 1;
         directionX = 1;
        
-        this.setActive(false);
     }
     
     public void setSpeed(double speedX, double speedY) {
@@ -33,9 +31,7 @@ public class ObjectEntity extends Entity {
         setX((getXPos() + directionX*(deltaTime/1000000000.0)*speedX));
     }
 	
-	public double getSpeed() {
-		return speed;
-	}
+
 	 /**
      * Vilken riktning i x-led
      * @param dx 0 = stilla, 1 = höger, -1 = vänster
