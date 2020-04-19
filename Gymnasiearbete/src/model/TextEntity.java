@@ -9,7 +9,7 @@ import java.awt.RenderingHints;
  * @author Pontus Gustafsson
  */
 public class TextEntity extends Entity {
-	
+
 	private int xPos, yPos;
 	private String text;
 	private Font font = null;
@@ -23,7 +23,7 @@ public class TextEntity extends Entity {
 		this.font = font;
 		this.color = color;
 	}
-	
+
 	@Override
 	public void draw(Graphics2D g) {	
 		if(font != null) {
@@ -33,7 +33,7 @@ public class TextEntity extends Entity {
 		g.setColor(color);
 		g.drawString(text, xPos, yPos);
 	}
-	
+
 	public void setFont(Font font) {
 		this.font = font;
 	}
@@ -48,5 +48,5 @@ public class TextEntity extends Entity {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 }

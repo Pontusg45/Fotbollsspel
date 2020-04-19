@@ -22,7 +22,7 @@ import model.TextEntity;
  * @author Pontus Gustafsson
  */
 public class GameView {
-	
+
 	private int height, width;
 	private String title;
 	private JFrame jf;
@@ -31,7 +31,7 @@ public class GameView {
 	private Color bgColor = Color.BLACK;
 	private Image bgImg = null;
 	private Graphics2D g;
-	
+
 	/**
 	 * Metod som impleterar tangentbords lyssnare i canvasen.
 	 * @param keyListener 
@@ -54,7 +54,7 @@ public class GameView {
 
 		createWindow(); 
 	}
-	
+
 	/**
 	 * Skapar vår rityta canvas med rätt bredd och höjd 
 	 */
@@ -78,7 +78,7 @@ public class GameView {
 		canvas.createBufferStrategy(2);
 		backBuffer = canvas.getBufferStrategy();
 	}
-	
+
 	/**
 	 * Renderar en Drawable-array
 	 * 
@@ -91,7 +91,7 @@ public class GameView {
 			drawArray[i].draw(g);    
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -102,7 +102,7 @@ public class GameView {
 			drawoObj.draw(g);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -113,7 +113,7 @@ public class GameView {
 
 		show();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -122,7 +122,7 @@ public class GameView {
 
 		drawObj.draw(g);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -136,7 +136,7 @@ public class GameView {
 			g.drawImage(bgImg, 0, 0, width, height, null);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -144,7 +144,7 @@ public class GameView {
 		g.dispose();
 		backBuffer.show();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -155,7 +155,7 @@ public class GameView {
 			spriteList.get(i).draw(g);    
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -169,34 +169,34 @@ public class GameView {
 	public void setMouseListner(MouseListener mouseListener) {
 		canvas.addMouseListener(mouseListener);
 	}
-	
+
 	/**
 	 * 
 	 */
 	public int getWidth() {
 		return width;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void setWidth(int width) {
 		this.width = width;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public int getHeight() {
 		return height;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
+
 }
 
