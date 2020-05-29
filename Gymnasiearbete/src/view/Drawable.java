@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 public interface Drawable {
 	/**
 	 * Renderar figuren/bilden
+	 * 
 	 * @param g grafikobjekt som figuren skall renderas av.
 	 */
 	public void draw(Graphics2D g);

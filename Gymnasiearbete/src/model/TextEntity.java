@@ -14,9 +14,18 @@ public class TextEntity extends Entity {
 	private String text;
 	private Font font = null;
 	private Color color = null;
-
+	
+	/**
+	 * Konstruktorn för alla textobjekt
+	 * 
+	 * @param text
+	 * @param xPos
+	 * @param yPos
+	 * @param font
+	 * @param color
+	 */
 	public TextEntity(String text, int xPos, int yPos, Font font, Color color) {
-		super(text ,xPos, yPos);
+		super(null ,xPos, yPos);
 		this.text = text;
 		this.xPos = xPos;
 		this.yPos = yPos;
@@ -33,7 +42,7 @@ public class TextEntity extends Entity {
 		g.setColor(color);
 		g.drawString(text, xPos, yPos);
 	}
-
+	
 	public void setFont(Font font) {
 		this.font = font;
 	}

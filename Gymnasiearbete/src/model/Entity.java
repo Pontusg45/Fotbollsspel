@@ -28,25 +28,22 @@ public class Entity implements Drawable{
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
-
-	/**
-	 * Konstruktorn som textEntity använder
-	 * 
-	 * @param txt textens instans variabel
-	 * @param xPos textens x-position
-	 * @param yPos textens y- position
-	 */
-	public Entity (String txt, double xPos, double yPos){ 
-		this.xPos = xPos;
-		this.yPos = yPos;
-	}
+	
 	@Override
 	public void draw(Graphics2D g) {
 		g.drawImage(image, (int)xPos, (int)yPos, null);
 	}
+	
+	/**
+	 * @return objektets positon i x-led
+	 */
 	public double getXPos() {
 		return xPos;
 	}
+	
+	/**
+	 * @param xPos objektets positon i x-led
+	 */
 	public void setX(double xPos) {
 		this.xPos = xPos;
 	}

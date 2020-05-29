@@ -23,6 +23,8 @@ import view.GameView;
 public class GameController implements MouseListener{
 
 	private GameView gv;
+	
+	private Random rand = new Random();
 
 	private boolean gameRunning = true;
 
@@ -44,25 +46,21 @@ public class GameController implements MouseListener{
 
 	private TextEntity scoreboard;
 	private TextEntity announcer;
-
-	private int endResult;
+	
+	private String[] endResult;
 
 	private int player1Point, player2Point;
 
 	private int nrOfPlayers;
 	private int nrOfRounds;
 
-	/*
-	 * @hasgetter
-	 * @hassetter
-	 */
 	private int goals, rounds, miss;
-
-	private double goalkeeperPosX, goalkeeperPosY;
 
 	private int goalkeeperPos;
 
 	private int mousePosX, mousePosY;
+	
+	private double goalkeeperPosX, goalkeeperPosY;
 
 	private double ballPosX, ballPosY;
 
@@ -70,15 +68,11 @@ public class GameController implements MouseListener{
 
 	private double timeForShot = 0.4;
 
-
-
-	private String ScoreboardSingleplayer = "Missar: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + "Runda: " + getRounds();
+	private String ScoreboardSingleplayer = "Målvakt: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + "Runda: " + getRounds();
 
 	private String ScoreboardMultiplayer = "Spelare 1: "+ getPlayer1Point() + " - " + "Spelare 2: "+ getPlayer2Point() + " | Runda " + ((getRounds()/2) + 1);
 
 	private String scoreboardContent = "";
-
-	private Random rand = new Random();
 
 	private JFrame parent = new JFrame();
 
@@ -88,6 +82,7 @@ public class GameController implements MouseListener{
 
 	/**
 	 * Spelets konstruktor.
+	 * 
 	 * @param GameView gv
 	 */
 	public GameController(GameView gv) {
@@ -100,7 +95,7 @@ public class GameController implements MouseListener{
 	}
 
 	/**
-	 * Skapar instanser av bildobjekten och textobjekten.
+	 * En metod som skapar instanser av bildobjekten och textobjekten.
 	 */
 	public void loadImages(){
 
@@ -110,13 +105,13 @@ public class GameController implements MouseListener{
 
 		setBallPosY((gv.getHeight()/6) *5);
 
-		setGoalkeeperPosX(gv.getWidth()/4);
+		setGoalkeeperPosY(gv.getWidth()/4);
 
-		setGoalkeeperPosY((int)(gv.getHeight()/2.06));
+		setGoalkeeperPosX((int)(gv.getHeight()/2.06));
 
 		goalkeeper = new ObjectEntity(goalkeeperPosX, goalkeeperPosY, goalkeeperImg,10, 0);
 
-		ball = new ObjectEntity(ballPosY, ballPosX, ballImg,getVelocityX(), getVelocityY());
+		ball = new ObjectEntity(ballPosX, ballPosY, ballImg,getVelocityX(), getVelocityY());
 
 		announcer = new TextEntity(" ", 400, 100, null, Color.white);
 
@@ -129,7 +124,7 @@ public class GameController implements MouseListener{
 	}
 
 	/**
-	 * Loopar igenom programmet när gamerunning är true.
+	 * En metod som gör spelet körbart och anropas i main-metoden
 	 */
 	public void run(){
 
@@ -145,21 +140,27 @@ public class GameController implements MouseListener{
 				lastUpdateTime = System.nanoTime();
 				update(deltaTime);
 				render();
+				
 				while(scoreboardContent == "") {
-					gameSetup();
+					gameSettings();
 				}
+				
 				turnCounter();
-				if (nrOfRounds == rounds/2 && nrOfRounds > 0){
+				
+				if (nrOfRounds == rounds && nrOfRounds > 0 || multiplayer == true && nrOfRounds*2 == rounds && nrOfRounds > 0){
 					endOfGame();
 				}
 			}
 		}
 	}
+	
 	/**
-	 * Uppdaterar programmet efter varje skott.
+	 * En metod som uppdaterar spelet
+	 * 
+	 *  @param deltaTime antal nanosekunder sedan förra anropet 
 	 */
 	public void update(long deltaTime) {
-		//if(mouseDown.get("clicked")) {
+		
 		if (Shot) {
 
 			ballMovement(deltaTime, mousePosX, mousePosY);
@@ -169,7 +170,8 @@ public class GameController implements MouseListener{
 			if (ball.getYPos() <= (getMousePosY() - (ballImg.getWidth(null)/2))) {
 				ball.setSpeed(0, 0);	
 
-				Shot = false; 
+				Shot = false;
+				
 				checkGoal();
 				console();
 
@@ -184,7 +186,7 @@ public class GameController implements MouseListener{
 	}
 
 	/**
-	 * Renderar spelets objekt i en Array.
+	 * En metod som rendera objekten i gameview-fönstret
 	 */
 	public void render() {
 
@@ -206,46 +208,52 @@ public class GameController implements MouseListener{
 		setVelocityY((mousePosY - (ballPosY+(ballImg.getHeight(null)/2)))/getTime());
 
 		ball.setSpeed(getVelocityX(), getVelocityY());
-
 		ball.move(deltaTime);
-
 		ball.setSpeed(0, 0);
 	}
 
 	/**
-	 * Förflyttar målvakten beroende på vilket X 
+	 * Flyttar målvaktens position genom att ändra hållet som den flyttar sig.
+	 * 
+	 * @param deltaTime skillnaden i tid mellan varje fps
 	 */
 	public void goalkeeperMovement(long deltaTime) {
-
-		if (getGoalkeeperPos()  == 401) { 
-			goalkeeper.setDirectionX(1);
+		
+		String[] direction = {"left", "center", "right"};
+		
+		switch (direction[getGoalkeeperPos()]) {
+			case "right":
+				goalkeeper.setDirectionX(1);
+				break;
+			case "center":
+				goalkeeper.setDirectionX(0);
+				break;
+			case "left":
+				goalkeeper.setDirectionX(-1);
+				break;
 		}
-		else if (getGoalkeeperPos() == 240) {
-			goalkeeper.setDirectionX(0);
-		}
-		else if (getGoalkeeperPos() == 79) {
-			goalkeeper.setDirectionX(-1);	 
-		}
-
-		goalkeeper.setSpeed(400, 0);
+		
 		goalkeeper.move(deltaTime);
+		goalkeeper.setSpeed(400, 0);
 	}
 
 	/**
-	 * Sätter upp spelets villkor
+	 * Sätter upp spelets inställningar
 	 */
-	public void gameSetup() {
+	public void gameSettings() {
 
 		nrOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("1 eller 2 spelare?"));
 		nrOfRounds = Integer.parseInt(JOptionPane.showInputDialog("Hur många rundor?"));
-
+		
 		if (nrOfPlayers == 1 ) {
 			scoreboardContent = ScoreboardSingleplayer;
 			singleplayer = true;
+			endResult = new String[]{"Du vann", "Målvakten vann", "Det blev lika"};
 		}
 		else if (nrOfPlayers == 2) {
 			scoreboardContent = ScoreboardMultiplayer;
 			multiplayer = true;
+			endResult =  new String[]{"Spelare 1 vann", "Spelare 2 vann", "Det blev lika"};
 		}
 		scoreboard.setText(scoreboardContent);
 	}
@@ -284,7 +292,7 @@ public class GameController implements MouseListener{
 		setRounds(rounds +1);
 
 		if (singleplayer) {
-			scoreboard.setText("Missar: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + " | Runda " + getRounds());
+			scoreboard.setText("Målvakt: "+ getMiss() + " - " + "Mål: "+ getGoals() + " " + " | Runda " + getRounds());
 		}
 		else if (multiplayer) {
 			scoreboard.setText("Spelare 1: "+ getPlayer1Point() + " - " + "Spelare 2: "+ getPlayer2Point() + " | Runda " + (getRounds()/2 +1));
@@ -292,26 +300,24 @@ public class GameController implements MouseListener{
 	}
 
 	/**
-	 * Loggar resultaten efter varje skott.
+	 * Loggar resultatet av ett skott i konsolen.
 	 */
 	public void console() {						
 		System.out.println("Runda: " + getRounds());							
 		System.out.println("Missar: "+ getMiss() + " - "+"Mål: " + getGoals());
 		System.out.println("Spelare 1 antal poäng: "+ getPlayer1Point());
 		System.out.println("Spelare 2 antal poäng: "+ getPlayer2Point());
-		System.out.println(getGoalkeeperPos());
 		System.out.println();
 	}
 
 	/**
-	 * Startar om återståller objektens positioner .
+	 * En metod som återställer objektens positioner.
 	 */
 	public void reset() {						
 		goalkeeper.setX(233);
 		goalkeeper.setY(160);
 		ball.setX((gv.getWidth()/2)-ballImg.getWidth(null)/2);
 		ball.setY((gv.getHeight()/6) *5);
-		//ball.setY(400);
 	}
 
 	/**
@@ -319,8 +325,7 @@ public class GameController implements MouseListener{
 	 */
 	public void turnCounter() {
 
-
-		if (getRounds()%2 == 0) {
+		if (getRounds()%2 == 0 && multiplayer == true) {
 			player1 = true;
 		} 
 		else {
@@ -332,27 +337,34 @@ public class GameController implements MouseListener{
 	 * Avslutar spelet och avgör vinnaren.
 	 */
 	public void endOfGame() {
-
-		if(getPlayer1Point() > getPlayer2Point()){
-			endResult = JOptionPane.showConfirmDialog(parent, "Spelare 1 vann" + "\n" + "Vill du börja ett nytt spel?", null, JOptionPane.YES_NO_OPTION);
+		
+		int i;
+		
+		if(getPlayer1Point() > getPlayer2Point() || getGoals() > getMiss()) {
+			i = 0;
 		}
-		else if(getPlayer1Point() == getPlayer2Point()) {
-			endResult = JOptionPane.showConfirmDialog(parent, "Det blev lika" + "\n" + "Vill du börja ett nytt spel?" , null, JOptionPane.YES_NO_OPTION);
+		else if (getPlayer1Point() < getPlayer2Point() || getGoals() < getMiss()){
+			i = 1;	
 		}
 		else {
-			endResult = JOptionPane.showConfirmDialog(parent, "Spelare 2 vann" + "\n" + "Vill du börja ett nytt spel?" , null, JOptionPane.YES_NO_OPTION);	
+			i = 2;
 		}
-		if (endResult == JOptionPane.YES_OPTION) {
+		
+		int endWindow = JOptionPane.showConfirmDialog(parent, getEndResult(i) + "\n" + "Vill du börja ett nytt spel?" , null, JOptionPane.YES_NO_OPTION);
+		
+		if (endWindow == JOptionPane.YES_OPTION) {
 			setPlayer2Point(0);
 			setPlayer1Point(0);
+			setMiss(0);
+			setGoals(0);
 			setRounds(0); 
 			scoreboard.setText(scoreboardContent);
 			return;
 		}
-		else if (endResult == JOptionPane.NO_OPTION) {
+		else if (endWindow == JOptionPane.NO_OPTION) {
 			System.exit(0);
 		}
-		else if(endResult == JOptionPane.CLOSED_OPTION) {
+		else if(endWindow == JOptionPane.CLOSED_OPTION) {
 			System.exit(0);
 		}
 	}
@@ -363,142 +375,96 @@ public class GameController implements MouseListener{
 	 * @param MouseEvent e
 	 */
 	public void mousePressed(MouseEvent e) {
-
 		int mouse = e.getClickCount();
 
-		if(mouse == MouseEvent.MOUSE_PRESSED)
+		if(mouse == MouseEvent.MOUSE_PRESSED) 
 			mouseDown.put("clicked", true);
-
+			
 		Shot = true;
-
-		setGoalkeeperPos(79 + (rand.nextInt(3) * 161));
-
+		
+		setGoalkeeperPos(rand.nextInt(3));
+		
 		setMousePosX(e.getX());
 		setMousePosY(e.getY());			
 	}
 
+	
 	/**
 	 * @Override
 	 */
 	public void mouseReleased(MouseEvent e) {
 
 		int mouse = e.getClickCount();
-		if(mouse == MouseEvent.MOUSE_PRESSED)
+		
+		if(mouse == MouseEvent.MOUSE_RELEASED)
 			mouseDown.put("clicked", false);	
 	}
-
-	/**
-	 * @param ballPosX
-	 */
+									/* Getters och Setters*/
+	
 	public void setBallPosX(int ballPosX) {
 		this.ballPosX = ballPosX;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getMousePosX() {
 		return mousePosX;
 	}
-	/**
-	 * @param mousePosX
-	 */
+
 	public void setMousePosX(int mousePosX) {
 		this.mousePosX = mousePosX;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getMousePosY() {
 		return mousePosY;
 	}
-	/**
-	 * @param mousePosY
-	 */
+
 	public void setMousePosY(int mousePosY) {
 		this.mousePosY = mousePosY;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getGoals() {
 		return goals;
 	}
-	/**
-	 * @param goals
-	 */
+
 	public void setGoals(int goals) {
 		this.goals = goals;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getMiss() {
 		return miss;
 	}
 
-	/**
-	 * @param miss
-	 */
-	/**
-	 * @param miss
-	 */
 	public void setMiss(int miss) {
 		this.miss = miss;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getRounds() {
 		return rounds;
 	}
-	/**
-	 * @param rounds
-	 */
+
 	public void setRounds(int rounds) {
 		this.rounds = rounds;
 	}
 
-	/**
-	 * @param scoreboardSingleplayer
-	 */
 	public void setScoreboardSingleplayer(String scoreboardSingleplayer) {
 		this.ScoreboardSingleplayer = scoreboardSingleplayer;
 	}
 
-	/**
-	 * @return
-	 */
 	public double getVelocityX() {
 		return velocityX;
 	}
-	/**
-	 * @param velocityX
-	 */
+
 	public void setVelocityX(double velocityX) {
 		this.velocityX = velocityX;
 	}
 
-	/**
-	 * @return
-	 */
 	public double getVelocityY() {
 		return velocityY;
 	}
-	/**
-	 * @param velocityY
-	 */
+
 	public void setVelocityY(double velocityY) {
 		this.velocityY = velocityY;
 	}
 
-	/**
-	 * @return
-	 */
 	public double getTime() {
 		return timeForShot;
 	}
@@ -515,71 +481,30 @@ public class GameController implements MouseListener{
 	public void mouseExited(MouseEvent e) {	
 	}
 
-	/**
-	 * @return
-	 */
 	public int getGoalkeeperPos() {
 		return goalkeeperPos;
 	}
 
-	/**
-	 * @param gkPos
-	 */
 	public void setGoalkeeperPos(int gkPos) {
 		this.goalkeeperPos = gkPos;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getPlayer1Point() {
 		return player1Point;
 	}
 
-	/**
-	 * @param player1Point
-	 */
 	public void setPlayer1Point(int player1Point) {
 		this.player1Point = player1Point;
 	}
 
-	/**
-	 * @return
-	 */
 	public int getPlayer2Point() {
 		return player2Point;
 	}
 
-	/**
-	 * @param player2Point
-	 */
 	public void setPlayer2Point(int player2Point) {
 		this.player2Point = player2Point;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getAmountOfRounds() {
-		return nrOfRounds;
-	}
-
-	/**
-	 * @param amountOfRounds
-	 */
-	public void setAmountOfRounds(int amountOfRounds) {
-		this.nrOfRounds = amountOfRounds;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getScoreboardContent() {
-		return scoreboardContent;
-	}
-	/**
-	 * @param scoreboardContent
-	 */
 	public void setScoreboardContent(String scoreboard) {
 		this.scoreboardContent = scoreboard;
 	}
@@ -598,10 +523,11 @@ public class GameController implements MouseListener{
 		this.ballPosY = ballPosY;
 	}
 
-	public double getGoalkeeperPosY() {
-		return goalkeeperPosY;
-	}
 	public void setGoalkeeperPosY(int goalkeeperPosY) {
 		this.goalkeeperPosY = goalkeeperPosY;
+	}
+	
+	public String getEndResult(int i) {
+		return endResult[i];
 	}
 }

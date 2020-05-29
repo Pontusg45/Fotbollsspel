@@ -9,7 +9,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,6 +18,8 @@ import model.Entity;
 import model.TextEntity;
 
 /**
+ * Denna klassen skapar spelts fönster och rityta
+ * 
  * @author Pontus Gustafsson
  */
 public class GameView {
@@ -32,13 +33,7 @@ public class GameView {
 	private Image bgImg = null;
 	private Graphics2D g;
 
-	/**
-	 * Metod som impleterar tangentbords lyssnare i canvasen.
-	 * @param keyListener 
-	 */
-	public void setKeyListener(KeyListener keyListener) {
-		canvas.addKeyListener(keyListener);
-	}
+	
 
 	/**
 	 * Spelfönstrets konstruktor
@@ -56,7 +51,7 @@ public class GameView {
 	}
 
 	/**
-	 * Skapar vår rityta canvas med rätt bredd och höjd 
+	 * Skapar fönstrets rityta canvas med rätt bredd och höjd 
 	 */
 	private void createWindow() {
 		canvas = new Canvas();
@@ -93,18 +88,9 @@ public class GameView {
 	}
 
 	/**
+	 * En metod som renderar textobjekten
 	 * 
-	 */
-	public void render(Collection<? extends Drawable> drawList) {
-		beginRender();
-
-		for(Drawable drawoObj : drawList) {
-			drawoObj.draw(g);
-		}
-	}
-
-	/**
-	 * 
+	 * @param textEntity tar emot ett textobjekt
 	 */
 	public void render(TextEntity textEntity) {
 		beginRender();
@@ -137,13 +123,7 @@ public class GameView {
 		}
 	}
 
-	/**
-	 * 
-	 */
-	public void show() {
-		g.dispose();
-		backBuffer.show();
-	}
+	
 
 	/**
 	 * 
@@ -155,12 +135,29 @@ public class GameView {
 			spriteList.get(i).draw(g);    
 		}
 	}
+	
+	/**
+	 * En metod som gör att de renderade objekten syns på skärmen
+	 */
+	public void show() {
+		g.dispose();
+		backBuffer.show();
+	}
 
 	/**
 	 * 
 	 */
 	public void setBackground(String pathToImage) {
 		bgImg = new ImageIcon(getClass().getResource(pathToImage)).getImage();
+	}
+	
+	/**
+	 * Metod som impleterar tangentbords lyssnare i canvasen.
+	 * 
+	 * @param keyListener 
+	 */
+	public void setKeyListener(KeyListener keyListener) {
+		canvas.addKeyListener(keyListener);
 	}
 
 	/**

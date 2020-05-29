@@ -1,1 +1,1 @@
-typeSearchIndex = [{"p":"controller","l":"GameController"}]
+typeSearchIndex = [{"p":"model","l":"TextEntity"}]
